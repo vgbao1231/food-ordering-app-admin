@@ -92,6 +92,7 @@ export function setDeep(obj: any, path: string, value: any) {
     }
   });
 }
+
 export const formatPriceRange = (
   priceArray: number[] | null | undefined
 ): string => {
@@ -115,4 +116,30 @@ export const formatPriceRange = (
   const max = convertAndFormat(maxPrice);
 
   return min === max ? min : `Từ ${min} - ${max}`;
+};
+
+export const formatDate = (dateString: string) =>
+  new Date(dateString).toLocaleDateString('vi-VN');
+
+export const decodeJwtPayload = (token: string | undefined) => {
+  if (!token) return null;
+  try {
+    const base64Url = token.split('.')[1];
+
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error('Lỗi giải mã JWT:', error);
+    return null;
+  }
 };

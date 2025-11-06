@@ -8,15 +8,19 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
+      // {
+      //   protocol: 'https',
+      //   hostname: 'food-cms.grab.com',
+      //   port: '',
+      //   pathname: '/compressed_webp/merchants/**',
+      // },
+      // {
+      //   protocol: 'https',
+      //   hostname: 'firebasestorage.googleapis.com',
+      // },
       {
-        protocol: 'https',
-        hostname: 'iqiglobal-web-revamp.s3.ap-southeast-1.amazonaws.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "**",
       },
     ],
   },

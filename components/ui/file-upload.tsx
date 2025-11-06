@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 
 interface FileUploadProps {
   label?: string;
-  value: { url: string; publicId: string } | File | null;
+  value: any;
   onChange: (file: File | null) => void;
   accept?: string;
   clickToDelete?: boolean;
@@ -88,11 +88,9 @@ export const FileUpload = memo(function FileUpload({
               </div>
             )}
             <div className="flex items-center justify-between w-full px-2 text-gray-300">
-              <div className="flex-grow flex-shrink min-w-0 flex items-center space-x-2">
+              <div className="flex-grow flex-shrink min-w-0 center-both space-x-2">
                 <ImageIcon className="h-4 w-4 flex-none" />
-                <span className="flex-grow flex-shrink min-w-0 truncate">
-                  {fileName}
-                </span>
+                <span className="flex-grow max-w-60 truncate">{fileName}</span>
               </div>
               {!clickToDelete && (
                 <Button
