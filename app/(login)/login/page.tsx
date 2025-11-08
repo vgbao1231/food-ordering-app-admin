@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Illustration */}
-      <div className="hidden lg:flex lg:w-1/3 bg-gradient-to-br from-[#e5712f] to-[#f03864] relative overflow-hidden">
+      <div className="hidden lg:w-1/3 bg-gradient-to-br from-[#e5712f] to-[#f03864] relative overflow-hidden">
         {/* Content */}
         <div className="relative z-10 flex flex-col px-8 py-16">
           {/* Logo */}
@@ -181,9 +181,9 @@ export default function AdminLoginPage() {
           <div className="w-full max-w-lg">
             {/* Logo and Title */}
             <div className="text-center mb-8 center-both flex-col">
-              <Image src="/logo.png" alt="logo" width={100} height={100} />
+              {/* <Image src="/logo.png" alt="logo" width={100} height={100} /> */}
               <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-                Đăng nhập vào IQI ATLAS
+                Đăng nhập vào PTITFOOD ADMIN
               </h1>
             </div>
 
@@ -277,33 +277,6 @@ export default function AdminLoginPage() {
                 {isLoading ? 'Đang đăng nhập' : 'ĐĂNG NHẬP'}
               </Button>
             </form>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 py-6 border-t border-gray-100">
-          <div className="text-center text-xs text-gray-500 space-y-1">
-            <div className="font-medium">IQI Holdings Sdn Bhd (1018842-U)</div>
-            <div>
-              26th -28th Floor, Tower D, Millierz Square, No. 357, Jalan Kelang
-              Lama, 58000 Kuala Lumpur, Malaysia.
-            </div>
-            <div>T: +60374506655</div>
-            <div className="flex justify-center space-x-4 mt-3">
-              <Link
-                href="/terms"
-                className="underline hover:font-semibold transition-all"
-              >
-                Điều khoản sử dụng
-              </Link>
-              <span>•</span>
-              <Link
-                href="/privacy"
-                className="underline hover:font-semibold transition-all"
-              >
-                Chính sách bảo mật
-              </Link>
-            </div>
           </div>
         </div>
 
