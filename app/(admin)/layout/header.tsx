@@ -6,13 +6,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useLogoutMutation } from '@/features/auth/authApi';
 import Cookies from 'js-cookie';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { useCachedUser } from '@/hooks/useCachedUser';
 
 export default function Header({ setSidebarOpen }: any) {
   const router = useRouter();
   const [logout, { isLoading }] = useLogoutMutation();
-  const me = useSelector((state: RootState) => state.auth.user);
+  const { user: me } = useCachedUser();
 
   const handleLogout = async () => {
     try {
@@ -58,15 +57,14 @@ export default function Header({ setSidebarOpen }: any) {
 
           {/* User menu */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 relative">
-              <Image
-                src={me?.avatar?.url || '/placeholder.svg'}
-                alt="Avatar"
-                width={40}
-                height={40}
-                className="object-cover rounded-full"
-              />
-            </div>
+            <Image
+              src={me?.avatar?.url || '/placeholder.svg'}
+              alt="Avatar"
+              width={40}
+              height={40}
+              className="object-cover w-10 h-10 rounded-full"
+              priority
+            />
             <div className="hidden sm:block">
               <div className="text-sm font-medium text-gray-900 dark:text-white">
                 {me?.name || 'Admin'}

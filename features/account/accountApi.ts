@@ -5,12 +5,12 @@ export const adminAccountApi = baseApi.injectEndpoints({
     getAllAccounts: builder.query<any, void>({
       query: () => '/admin/accounts',
       providesTags: (result) => {
-        const admins = result?.data || [];
+        const accounts = result?.data || [];
 
-        if (Array.isArray(admins) && admins.length > 0) {
+        if (Array.isArray(accounts) && accounts.length > 0) {
           return [
             { type: tagTypes.Account, id: 'LIST' },
-            ...admins.map((admin) => ({
+            ...accounts.map((admin) => ({
               type: tagTypes.Account,
               id: admin._id,
             })),

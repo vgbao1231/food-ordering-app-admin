@@ -13,6 +13,22 @@ export interface User {
   gender: string;
   role: string;
   avatar: any;
+  token: string;
+  refreshToken: string;
+}
+
+interface ForgotPasswordPayload {
+  email: string;
+}
+
+interface CheckOtpPayload {
+  email: string;
+  otp: string;
+}
+
+interface ResetPasswordPayload {
+  email: string;
+  newPassword: string;
 }
 
 export const authApi = baseApi.injectEndpoints({
@@ -40,7 +56,7 @@ export const authApi = baseApi.injectEndpoints({
         url: `/user/${id}`,
         credentials: 'include',
       }),
-      providesTags: [tagTypes.Auth],
+      providesTags: (result, error, id) => [{ type: tagTypes.Account, id }],
     }),
     updateProfile: builder.mutation<any, any>({
       query: (data) => ({
@@ -52,8 +68,41 @@ export const authApi = baseApi.injectEndpoints({
     }),
     changePassword: builder.mutation<any, any>({
       query: (body) => ({
-        url: '/auth/password',
-        method: 'PATCH',
+        url: '/auth/change-password',
+        method: 'PUT',
+        body,
+      }),
+    }),
+
+    forgotPassword: builder.mutation<
+      { success: boolean; message: string },
+      ForgotPasswordPayload
+    >({
+      query: (body) => ({
+        url: '/auth/forgot-password', // Thay đổi URL nếu cần
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    checkOtp: builder.mutation<
+      { success: boolean; token: string },
+      CheckOtpPayload
+    >({
+      query: (body) => ({
+        url: '/auth/check-otp',
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    resetPassword: builder.mutation<
+      { success: boolean; message: string },
+      ResetPasswordPayload
+    >({
+      query: (body) => ({
+        url: '/auth/reset-password',
+        method: 'PUT',
         body,
       }),
     }),
@@ -66,4 +115,7 @@ export const {
   useMeQuery,
   useUpdateProfileMutation,
   useChangePasswordMutation,
+  useCheckOtpMutation,
+  useResetPasswordMutation,
+  useForgotPasswordMutation,
 } = authApi;

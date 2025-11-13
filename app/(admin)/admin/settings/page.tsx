@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -17,14 +17,13 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Camera, Save, Eye, EyeOff, Loader2, Check, X } from 'lucide-react';
 import { cn, compressImage } from '@/lib/utils';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { useDispatch } from 'react-redux';
 import {
   useChangePasswordMutation,
   useUpdateProfileMutation,
 } from '@/features/auth/authApi';
-import { setUser } from '@/features/auth/authSlice';
 import { useUploadImagesMutation } from '@/features/upload/uploadApi';
+import { useCachedUser } from '@/hooks/useCachedUser';
 
 // Định nghĩa lại cấu trúc Image để tránh lỗi TypeScript
 interface UserImage {
@@ -38,7 +37,7 @@ interface FormData {
   email: string;
   phonenumber: string;
   avatar: File | UserImage | null; // Cấu trúc dữ liệu cho image
-  currentPassword: string;
+  oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
@@ -47,7 +46,7 @@ interface FormErrors {
   name?: string;
   email?: string;
   phonenumber?: string;
-  currentPassword?: string;
+  oldPassword?: string;
   newPassword?: string;
   confirmPassword?: string;
 }
@@ -73,13 +72,13 @@ export default function ProfileSettings() {
   const [uploadImage] = useUploadImagesMutation();
   const dispatch = useDispatch();
 
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const { user: currentUser } = useCachedUser();
   const [formData, setFormData] = useState<FormData>({
     name: currentUser?.name || '',
     email: currentUser?.email || '',
     phonenumber: currentUser?.phonenumber || '',
     avatar: (currentUser?.avatar as UserImage) || null,
-    currentPassword: '',
+    oldPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
@@ -163,12 +162,12 @@ export default function ProfileSettings() {
 
     // Validate password change (only if user is trying to change password)
     if (
-      formData.currentPassword ||
+      formData.oldPassword ||
       formData.newPassword ||
       formData.confirmPassword
     ) {
-      if (!formData.currentPassword) {
-        newErrors.currentPassword = 'Vui lòng nhập mật khẩu hiện tại';
+      if (!formData.oldPassword) {
+        newErrors.oldPassword = 'Vui lòng nhập mật khẩu hiện tại';
       }
 
       if (!formData.newPassword) {
@@ -244,7 +243,7 @@ export default function ProfileSettings() {
 
         // Giả định useUploadImageMutation trả về { url, filePath } hoặc [ { url, filePath } ]
         const uploadRes = await uploadImage({
-          files: [compressedFile], // Gửi file dưới dạng mảng (theo logic BE)
+          files: [compressedFile],
         }).unwrap();
 
         const uploadedFileDetail = Array.isArray(uploadRes)
@@ -274,15 +273,14 @@ export default function ProfileSettings() {
 
       // 5. Xử lý Đổi Mật khẩu
       const isPasswordChangeAttempt =
-        formData.currentPassword ||
+        formData.oldPassword ||
         formData.newPassword ||
         formData.confirmPassword;
 
       if (isPasswordChangeAttempt) {
         const passwordData = {
-          currentPassword: formData.currentPassword,
+          oldPassword: formData.oldPassword,
           newPassword: formData.newPassword,
-          confirmNewPassword: formData.confirmPassword, // Tên trường thường là confirmNewPassword
         };
 
         await changePassword(passwordData).unwrap();
@@ -290,7 +288,7 @@ export default function ProfileSettings() {
         // Xóa trường mật khẩu sau khi đổi thành công
         setFormData((prev) => ({
           ...prev,
-          currentPassword: '',
+          oldPassword: '',
           newPassword: '',
           confirmPassword: '',
         }));
@@ -308,11 +306,6 @@ export default function ProfileSettings() {
         // Chỉ cập nhật Profile
         toast.success('Cập nhật thông tin thành công!');
       }
-
-      // 6. Cập nhật Redux store (sau khi profile update thành công)
-      if (profileResult && profileResult.data) {
-        dispatch(setUser(profileResult.data));
-      }
     } catch (error: any) {
       const errorMessage =
         error?.data?.message ||
@@ -324,6 +317,14 @@ export default function ProfileSettings() {
       setIsUploadingAvatar(false); // Đảm bảo reset cả trạng thái upload avatar
     }
   };
+
+  const avatarPreview = useMemo(
+    () =>
+      formData.avatar instanceof File
+        ? URL.createObjectURL(formData.avatar)
+        : formData.avatar?.url || '/placeholder.svg',
+    [formData.avatar]
+  );
 
   // ... (Phần render UI giữ nguyên, chỉ thay đổi logic bên trong)
   return (
@@ -349,11 +350,7 @@ export default function ProfileSettings() {
             <div className="flex flex-col items-center gap-4">
               <Avatar className="w-24 h-24 rounded-full overflow-hidden">
                 <AvatarImage
-                  src={
-                    formData.avatar instanceof File
-                      ? URL.createObjectURL(formData.avatar)
-                      : formData.avatar?.url || '/placeholder.svg'
-                  }
+                  src={avatarPreview}
                   className="w-full h-full object-cover"
                   alt="User Avatar"
                 />
@@ -448,17 +445,17 @@ export default function ProfileSettings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="currentPassword">Mật khẩu hiện tại</Label>
+              <Label htmlFor="oldPassword">Mật khẩu hiện tại</Label>
               <div className="relative">
                 <Input
-                  id="currentPassword"
+                  id="oldPassword"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Nhập mật khẩu hiện tại"
-                  value={formData.currentPassword}
+                  value={formData.oldPassword}
                   onChange={(e) =>
-                    handleInputChange('currentPassword', e.target.value)
+                    handleInputChange('oldPassword', e.target.value)
                   }
-                  className={errors.currentPassword ? 'border-red-500' : ''}
+                  className={errors.oldPassword ? 'border-red-500' : ''}
                   disabled={isLoading}
                 />
                 <Button
@@ -476,8 +473,8 @@ export default function ProfileSettings() {
                   )}
                 </Button>
               </div>
-              {errors.currentPassword && (
-                <p className="text-sm text-red-500">{errors.currentPassword}</p>
+              {errors.oldPassword && (
+                <p className="text-sm text-red-500">{errors.oldPassword}</p>
               )}
             </div>
 

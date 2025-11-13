@@ -1,4 +1,4 @@
-import { baseApi } from '../api/baseApi';
+import { baseApi, tagTypes } from '../api/baseApi';
 
 interface UploadResult {
   url: string;
@@ -25,6 +25,7 @@ export const uploadApi = baseApi.injectEndpoints({
           body: formData,
         };
       },
+      invalidatesTags: [tagTypes.Account, tagTypes.SystemCategory],
     }),
 
     deleteFile: builder.mutation<{ message: string }, { filePath: string }>({

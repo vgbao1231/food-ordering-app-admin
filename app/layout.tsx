@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* TODO: sửa logo */}
-        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="icon" type="image/png" href="/food_app_logo_no_bgr.png" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <ToastContainer autoClose={3000} />

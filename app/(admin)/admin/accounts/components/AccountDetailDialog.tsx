@@ -129,9 +129,7 @@ export const AccountDetailDialog: React.FC<AccountDetailDialogProps> = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode
-              ? 'Chỉnh Sửa Tài Khoản Admin'
-              : 'Tạo Tài Khoản Admin Mới'}
+            {isEditMode ? 'Chỉnh Sửa Tài Khoản' : 'Tạo Tài Khoản Mới'}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>

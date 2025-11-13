@@ -60,21 +60,19 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Illustration */}
-      <div className="hidden lg:w-1/3 bg-gradient-to-br from-[#e5712f] to-[#f03864] relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/3 bg-gradient-to-br from-[#e5712f] to-[#f03864] relative overflow-hidden">
         {/* Content */}
-        <div className="relative z-10 flex flex-col px-8 py-16">
+        <div className="relative z-10 center-both flex-col px-8 py-16 w-full gap-24">
           {/* Logo */}
-          <div className="flex items-center space-x-3 mb-8">
-            <Image src="/logo.png" alt="logo" width={100} height={100} />
-          </div>
-
-          {/* Main Text */}
-          <h5 className="text-2xl lg:text-4xl font-semibold text-white leading-tight flex-1">
-            Trao quyền cho các đại lý IQI, hợp lý hóa quy trình bất động sản
-          </h5>
+          <Image
+            src="/food_app_logo_no_bgr.png"
+            alt="logo"
+            width={200}
+            height={200}
+          />
 
           {/* Illustration Area */}
-          <div className="relative">
+          <div className="relative h-60 w-full">
             {/* Floating Elements */}
             <motion.div
               animate={{
@@ -86,9 +84,9 @@ export default function AdminLoginPage() {
                 repeat: Number.POSITIVE_INFINITY,
                 ease: 'easeInOut',
               }}
-              className="absolute top-0 left-0 w-16 h-16 bg-yellow-300 rounded-2xl center-both shadow-lg"
+              className="absolute top-0 left-0 w-20 h-20 bg-red-300 rounded-2xl center-both shadow-lg"
             >
-              <span className="text-2xl">📊</span>
+              <span className="text-5xl">🧋</span>
             </motion.div>
 
             <motion.div
@@ -102,9 +100,9 @@ export default function AdminLoginPage() {
                 ease: 'easeInOut',
                 delay: 1,
               }}
-              className="absolute top-4 right-0 w-14 h-14 bg-blue-400 rounded-xl center-both shadow-lg"
+              className="absolute top-4 right-0 w-16 h-16 bg-blue-400 rounded-xl center-both shadow-lg"
             >
-              <span className="text-2xl">🏢</span>
+              <span className="text-4xl">🍟</span>
             </motion.div>
 
             <motion.div
@@ -118,16 +116,16 @@ export default function AdminLoginPage() {
                 ease: 'easeInOut',
                 delay: 2,
               }}
-              className="absolute bottom-0 left-4 w-12 h-12 bg-green-400 rounded-lg center-both shadow-lg"
+              className="absolute bottom-0 left-4 w-14 h-14 bg-green-400 rounded-lg center-both shadow-lg"
             >
-              <span className="text-lg">🚀</span>
+              <span className="text-3xl">🍗</span>
             </motion.div>
 
             {/* Main Character */}
             <div className="flex justify-center mt-16">
               <motion.div
                 animate={{
-                  y: [0, -5, 0],
+                  y: [0, -10, 0],
                 }}
                 transition={{
                   duration: 3,
@@ -136,7 +134,7 @@ export default function AdminLoginPage() {
                 }}
                 className="w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full center-both shadow-2xl"
               >
-                <span className="text-6xl">🐯</span>
+                <span className="text-6xl">🍔</span>
               </motion.div>
             </div>
 
@@ -151,9 +149,9 @@ export default function AdminLoginPage() {
                 repeat: Number.POSITIVE_INFINITY,
                 ease: 'linear',
               }}
-              className="absolute bottom-0 right-8 w-12 h-12 bg-purple-400 rounded-full center-both shadow-lg"
+              className="absolute bottom-0 right-8 w-16 h-16 bg-purple-400 rounded-full center-both shadow-lg"
             >
-              <span className="text-2xl">⭐</span>
+              <span className="text-3xl">🍕</span>
             </motion.div>
           </div>
         </div>
@@ -166,7 +164,7 @@ export default function AdminLoginPage() {
           <div className="lg:hidden">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-orange-500 rounded-lg center-both">
-                <span className="text-white font-bold text-sm">IQI</span>
+                <span className="text-white font-bold text-sm">PTIT Food</span>
               </div>
             </div>
           </div>
@@ -201,7 +199,7 @@ export default function AdminLoginPage() {
                   <Input
                     type="email"
                     name="email"
-                    placeholder="admin@iqi.com"
+                    placeholder="admin@gmail.com"
                     className="pl-10 placeholder:text-gray-400"
                     value={formData.email}
                     onChange={(e) =>
@@ -262,7 +260,7 @@ export default function AdminLoginPage() {
                   </label>
                 </div>
                 <Link
-                  href="/admin/forgot-password"
+                  href="/forgot-password"
                   className="text-sm text-blue-600 hover:text-blue-700"
                 >
                   Quên mật khẩu?

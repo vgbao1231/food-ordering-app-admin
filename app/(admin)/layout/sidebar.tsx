@@ -28,12 +28,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
       icon: LayoutGrid,
       current: pathname.startsWith('/admin/systemCategory'),
     },
-    {
-      name: 'Test',
-      href: '/admin/test',
-      icon: LayoutGrid,
-      current: pathname.startsWith('/admin/test'),
-    },
   ];
   return (
     <>
